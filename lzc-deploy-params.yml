@@ -1,0 +1,13 @@
+params:
+  - id: auth_password
+    type: secret
+    name: Login password
+    description: "Operator login password. Seeds the stored password on first boot only; change it later in Settings -> Security."
+    default_value: "$random(len=16)"
+    optional: false
+
+locales:
+  zh:
+    auth_password:
+      name: 登录密码
+      description: 管理员登录密码，仅首次启动时写入；之后请在应用内 Settings -> Security 修改。

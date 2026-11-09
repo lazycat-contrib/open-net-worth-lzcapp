@@ -1,0 +1,49 @@
+application:
+  subdomain: opennetworth
+  multi_instance: false
+  # Password auth is enforced by AUTH_PASSWORD (random, injected at deploy);
+  # the app's loopback-trust shortcut never applies inside a container
+  # (documented upstream), so the login page is always shown. Self-contained
+  # auth -> public_path per the papra/servas precedent.
+  public_path:
+    - /
+  upstreams:
+    - location: /
+      backend: http://app:8080/
+services:
+  app:
+    # upstream: ghcr.io/open-net-worth-ai/open-net-worth:0.1.43
+    image: ghcr.1ms.run/open-net-worth-ai/open-net-worth:0.1.43
+    environment:
+      - HOST=0.0.0.0
+      - PORT=8080
+      # Seeds the operator password on first boot only; change it later in
+      # Settings -> Security.
+      - AUTH_PASSWORD={{ .U.auth_password }}
+      - TZ=Asia/Shanghai
+    binds:
+      - /lzcapp/var/data:/home/onw/.open-net-worth
+      - /lzcapp/var/codex:/home/onw/.codex
+      - /lzcapp/var/claude:/home/onw/.claude
+      - /lzcapp/var/opencode:/home/onw/.local/share/opencode
+    stop_grace_period: 30s
+usage: |
+  Open Net Worth 是一个自托管的个人财务管理 AI：追踪预算与投资净值，
+  内置 AI 代理可以分析账目、给出建议，配置券商凭据后还能代为下单。
+
+  首次使用：
+    - 打开应用入口，输入部署时生成的登录密码（可在部署参数里查看）。
+      首次登录后请到 Settings -> Security 修改为自己的密码。
+    - 在 Settings -> AI 里配置 AI 供应商（API Key 或 CLI 登录）后，
+      AI 代理功能才可用。
+
+  重要说明：
+    - 这是一个管理真实财务数据的应用。请务必修改初始密码，不要把入口
+      分享给不信任的人。
+    - AI 功能需要你自己的模型凭据（OpenAI 兼容 API Key，或在容器内
+      登录 Claude Code / Codex / OpenCode CLI）。券商下单功能同理，
+      需要你自己的券商接入凭据，使用前请自行评估风险。
+    - 数据（SQLite 数据库与配置）保存在应用数据目录，随应用持久化；
+      CLI 登录态分别保存在三个独立目录，升级重建不丢失。
+    - 本应用基于 AGPL-3.0 开源，许可与第三方声明随包分发。
+    - 未做实机验证。

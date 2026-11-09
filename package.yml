@@ -1,0 +1,18 @@
+package: community.lazycat.app.open-net-worth
+name: Open Net Worth
+description: "Self-hosted personal finance AI: budget and investment tracking with an AI agent, optional broker trading."
+version: 0.1.43
+min_os_version: "1.5.0"
+homepage: https://github.com/open-net-worth-ai/open-net-worth
+author: Tai Duong and contributors
+license: AGPL-3.0
+permissions:
+  required:
+    - net.internet
+locales:
+  zh:
+    name: Open Net Worth
+    description: "自托管个人财务 AI：预算与投资追踪，AI 代理管理账目，可选券商下单。"
+  en:
+    name: Open Net Worth
+    description: "Self-hosted personal finance AI: budget and investment tracking with an AI agent, optional broker trading."
